@@ -3,7 +3,7 @@ import os.path
 import yaml
 
 # First Step : Create SparkSession object
-if __name__ = "__main__":
+if __name__ == "__main__":
     spark = SparkSession \
         .builder \
         .appName("Spark Dataframe example") \
@@ -37,3 +37,5 @@ if __name__ = "__main__":
     # RDD[(Long, Long, Double, Long, Int, Long, String)]
     for rec in txn_fct_rdd.take(5):
         print(rec)
+
+#  spark-submit --packages "org.apache.hadoop:hadoop-aws:2.7.4" rdd/WorkingExample.py
