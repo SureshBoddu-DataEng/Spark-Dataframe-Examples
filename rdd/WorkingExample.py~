@@ -19,7 +19,7 @@ if __name__ == "__main__":
 # Third Step : load into yaml
 
     config = open(app_config_path)
-    app_conf = yaml.load(config, Loader=yaml.FullLoader)
+    app_config = yaml.load(config, Loader=yaml.FullLoader)
 
     secret = open(app_secrets_path)
     app_secret = yaml.load(secret, Loader=yaml.FullLoader)
