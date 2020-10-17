@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession, Row
+from distutils.util import strtobool
 import os.path
 import yaml
 
@@ -29,13 +30,23 @@ if __name__ == "__main__":
     hadoop_conf.set("fs.s3a.access.key", app_secret["s3_conf"]["access_key"])
     hadoop_conf.set("fs.s3a.secret.key", app_secret["s3_conf"]["secret_access_key"])
 
-    txn_fct_rdd = spark.sparkContext.textFile("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/txn_fct.csv") \
-        .filter(lambda record: record.find("txn_id")) \
-        .map(lambda record: record.split("|")) \
-        .map(lambda record: (int(record[0]), record[1], float(record[2]), record[3], record[4], record[5], record[6]))
+    demographics_rdd = spark.sparkContext.textFile("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/demographic.csv")
+    finances_rdd = spark.sparkContext.textFile("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/finances.csv")
 
-    # RDD[(Long, Long, Double, Long, Int, Long, String)]
-    for rec in txn_fct_rdd.take(5):
-        print(rec)
+    demographics_pair_rdd = demographics_rdd \
+        .map(lambda line: line.split(",")) \
+        .map(lambda lst: (
+    int(lst[0]), (int(lst[1]), strtobool(lst[2]), lst[3], lst[4], strtobool(lst[5]), strtobool(lst[6]), int(lst[7]))))
+
+    finances_pair_rdd = finances_rdd \
+        .map(lambda line: line.split(",")) \
+        .map(lambda lst: (int(lst[0]), (strtobool(lst[1]), strtobool(lst[2]), strtobool(lst[3]), int(lst[4]))))
+
+    print('Participants belongs to \'Switzerland\', having debts and financial dependents,')
+    join_pair_rdd = demographics_pair_rdd \
+        .join(finances_pair_rdd) \
+        .filter(lambda rec: (rec[1][0][2] == "Switzerland") and (rec[1][1][0] == 1) and (rec[1][1][1] == 1)) \
+ \
+            join_pair_rdd.foreach(print)
 
 #  spark-submit --packages "org.apache.hadoop:hadoop-aws:2.7.4" rdd/WorkingExample.py
