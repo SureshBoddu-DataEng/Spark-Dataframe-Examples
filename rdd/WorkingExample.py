@@ -26,8 +26,8 @@ if __name__ == "__main__":
 
 # Fourth Step : create hadoop conf object
     hadoop_conf = spark.sparkContext._jsc.hadoopConfiguration()
-    hadoop_conf.set("fs.s3a.access.key",app_secret["s3_config"]["aceess_key"])
-    hadoop_conf.set("fs.s3a.secret.access.key", app_secret["s3_config"]["secret_aceess_key"])
+    hadoop_conf.set("fs.s3a.access.key", app_secret["s3_conf"]["access_key"])
+    hadoop_conf.set("fs.s3a.secret.key", app_secret["s3_conf"]["secret_access_key"])
 
     txn_fct_rdd = spark.sparkContext.textFile("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/txn_fct.csv") \
         .filter(lambda record: record.find("txn_id")) \
