@@ -9,6 +9,7 @@ if __name__ == "__main__":
         .builder \
         .appName("Spark Dataframe example") \
         .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4') \
+        .master('local[*]') \
         .getOrCreate()
 
 # Second Step : set diretory and paths
@@ -39,4 +40,4 @@ if __name__ == "__main__":
 
     demographics_pair_rdd.foreach(print)
 
-#  spark-submit --packages "org.apache.hadoop:hadoop-aws:2.7.4" rdd/WorkingExample.py
+#  spark-submit --master yarn --packages "org.apache.hadoop:hadoop-aws:2.7.4" rdd/WorkingExample.py
