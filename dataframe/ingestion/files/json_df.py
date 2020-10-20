@@ -31,18 +31,6 @@ if __name__ == '__main__':
     hadoop_conf.set("fs.s3a.access.key", app_secret["s3_conf"]["access_key"])
     hadoop_conf.set("fs.s3a.secret.key", app_secret["s3_conf"]["secret_access_key"])
 
-    company_df = spark.read\
-        .json("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/company.json")
-
-    company_df.printSchema()
-    company_df.show(5, False)
-
-    flattened_df = company_df.select(col("company"), explode(col("employees")).alias("employee"))
-    flattened_df.show()
-
-    flattened_df \
-        .select(col("company"), col("employee.firstName").alias("emp_name")) \
-        .show()
 
     spark.stop()
 
