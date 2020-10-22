@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 import yaml
 import os.path
 import sys
-#import utils.aws_utils as ut
+import utils.aws_utils as ut
 
 if __name__ == '__main__':
 
@@ -44,15 +44,7 @@ if __name__ == '__main__':
     print("Writing txn_fact dataframe to AWS Redshift Table   >>>>>>>")
 
 
-    def get_redshift_jdbc_url(redshift_config: dict):
-        host = redshift_config["redshift_conf"]["host"]
-        port = redshift_config["redshift_conf"]["port"]
-        database = redshift_config["redshift_conf"]["database"]
-        username = redshift_config["redshift_conf"]["username"]
-        password = redshift_config["redshift_conf"]["password"]
-        return "jdbc:redshift://{}:{}/{}?user={}&password={}".format(host, port, database, username, password)
-
-    jdbcUrl = get_redshift_jdbc_url(app_secret)
+    jdbcUrl = ut.get_redshift_jdbc_url(app_secret)
     print(jdbcUrl)
 
     txnDf.coalesce(1).write\
