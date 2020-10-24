@@ -1,18 +1,9 @@
 from pyspark.sql import SparkSession
 import yaml
 import os.path
-#from model.Student import Student
-
-from dataclasses import dataclass
-
+import model.Student as Student
 
 if __name__ == '__main__':
-    @dataclass(frozen=True)
-    class Student(object):
-        firstname: str
-        lastname: str
-        school: str
-        studentno: int
 
     os.environ["PYSPARK_SUBMIT_ARGS"] = (
         '--packages "org.mongodb.spark:mongo-spark-connector_2.11:2.4.2" pyspark-shell'
