@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession
 import yaml
 import os.path
-from model import Student
+from model.Student import Student
 
 if __name__ == '__main__':
 
